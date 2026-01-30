@@ -1,6 +1,6 @@
 ## **Recommended Reading**
 
-* [NumPy Illustrated: A Visual Guide](https://medium.com/better-programming/numpy-illustrated-the-visual-guide-to-numpy-3b1d4976de1d) \- Excellent for visual learners.  
+* [A Visual Intro to NumPy and Data Representation](https://jalammar.github.io/visual-numpy/)) \- Excellent for visual learners.  
 * [Official NumPy Quickstart](https://numpy.org/doc/stable/user/quickstart.html)
 * [[ALL of linear algebra in 7 minutes]](https://www.youtube.com/watch?v=QL4_4GAWvPs)
 
