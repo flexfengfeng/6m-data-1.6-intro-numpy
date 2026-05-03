@@ -16,7 +16,7 @@
 | 0:00 – 0:10 | Welcome | Session goals & setup check |
 | 0:10 – 1:00 | Parts 1–2 | Performance Benchmark + The ndarray |
 | 1:00 – 1:05 | Break | — |
-| 1:05 – 1:55 | Parts 3–4 | Arithmetic & Broadcasting + Indexing and Slicing |
+| 1:05 – 1:55 | Parts 3–5 | Arithmetic & Broadcasting + Indexing & Slicing + Boolean Indexing |
 | 1:55 – 2:00 | Break | — |
 | 2:00 – 2:55 | Parts 6–7 | ufuncs & Methods + Linear Algebra |
 | 2:55 – 3:00 | Wrap-Up | Key Takeaways |
@@ -91,11 +91,52 @@ Notebook section: **"Part 4: Indexing and Slicing"**
 - 2D array indexing with `[row, col]` syntax
 - Array slices are **views**, not copies — modifying a slice affects the original array
 
+---
+
+## 🏃 Part 5: Boolean Indexing
+
+Notebook section: **"Part 5: Boolean Indexing"**
+
+Comparisons on arrays (such as `==`, `>`, `<`) are vectorized — they produce a **Boolean array** of `True`/`False` values. That Boolean array can then be used directly to filter data, selecting only the rows where the condition is `True`.
+
+```python
+names  = np.array(['Bob', 'Joe', 'Will', 'Bob', 'Will', 'Joe', 'Joe'])
+scores = np.array([[75, 80], [85, 90], [95, 100], [100, 77], [85, 92], [95, 80], [72, 80]])
+
+bob_mask = (names == 'Bob')          # array([True, False, False, True, False, False, False])
+print(scores[bob_mask])              # rows where name is 'Bob'
+```
+
+Key points:
+- The boolean mask must have the same length as the dimension you are indexing
+- Combine conditions with `&` (AND) and `|` (OR) — each condition must be wrapped in parentheses
+- Assigning to a boolean-indexed slice modifies the **original** array in place
+
 ### 🛠️ Exercise 3: Complex Filtering
 
-- Select all scores where the name is NOT 'Bob'
-- Select scores for 'Bob' or 'Will' using the `|` operator
-- Find all scores less than 80 and set them to 0
+Using the `names` and `scores` arrays from the demo cell:
+
+1. Select all scores where the name is NOT `'Bob'` (use `!=` or `~`)
+2. Select scores for `'Bob'` or `'Will'` using the `|` operator
+3. Find all scores less than 80 and set them to 0
+
+<details>
+<summary>💡 Solution — try it yourself first!</summary>
+
+```python
+# 1. Scores where name is NOT 'Bob'
+print(scores[names != 'Bob'])
+
+# 2. Scores for 'Bob' or 'Will'
+mask = (names == 'Bob') | (names == 'Will')
+print(scores[mask])
+
+# 3. Set all scores below 80 to 0
+scores[scores < 80] = 0
+print(scores)
+```
+
+</details>
 
 ---
 
