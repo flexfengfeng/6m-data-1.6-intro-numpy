@@ -185,6 +185,10 @@ Practising these patterns now will make later topics (like Pandas and modelling)
 
 ### **1\. Array Creation & Inspection**
 
+**Why `arange` instead of `range`?** `np.arange` returns a NumPy array (not a Python list), so it already supports fast math operations. `range` returns a lazy iterator — you'd have to convert it with `np.array(range(...))`.
+
+**Why check `shape`, `ndim`, and `dtype` first?** These three attributes give you a complete picture of what you're working with before touching the data. Missing this step is like opening a spreadsheet without knowing how many columns it has.
+
 ```
 # 1D array 10 to 19
 arr_1d = np.arange(10, 20)
@@ -210,7 +214,9 @@ print("\nConverted to int:\n", arr_2d_int)
 
 ## **Part 2: Sales Table Drill**
 
-*Note: Since the original data was empty in the prompt, I have used sample data.*
+**Why does selecting a single row give a 1D result?** When you pick one row (`sales[1, :]`), NumPy removes that dimension — you asked for one row, so the "rows" dimension collapses and you get a flat 1D array. This is called "dimension reduction." If you want to keep it 2D (e.g., shape `(1, 5)` instead of `(5,)`), use `sales[1:2, :]` (a slice of one row, not a single index).
+
+**Why does `sales[[0, 3], 4]` give a 1D array?** You passed a list of row indices and a single column — so the result is a 1D array of the values at (row 0, col 4) and (row 3, col 4). This is fancy indexing — NumPy picks the elements in the order you listed them.
 
 ```
 sales = np.array([
@@ -263,6 +269,12 @@ print("High Value/High Efficiency:", names[high_value_mask])
 
 ## **Part 4: Gradebook Aggregations**
 
+**Why `axis=1` for student averages and `axis=0` for subject averages?**
+- Each student is a row. To get one average *per student*, we collapse across the columns → `axis=1`.
+- Each subject is a column. To get one average *per subject*, we collapse down the rows → `axis=0`.
+
+**Why does centering work with broadcasting?** `scores - subject_avg` subtracts a 1D array (shape `(3,)`) from a 2D array (shape `(5, 3)`). NumPy broadcasts the 1D array across all 5 rows automatically — each column gets its own subject mean subtracted. This is the standard way to normalise data.
+
 ```
 scores = np.array([
     [85, 90, 78], # S1
@@ -314,6 +326,10 @@ print("Back to original match?", np.array_equal(daily_visits, original_shape))
 **Assumption:** We assume the first 5 elements are Week 1, the next 5 are Week 2, and so on. If the data had weekends included but we reshaped to 5 columns, our "weeks" would drift chronologically.
 
 ## **Part 6: Mini-project: Scoring Model**
+
+**Why `X @ w` instead of a loop?** `X @ w` is matrix-vector multiplication. For each customer (row), it multiplies the three feature values by the three weights and adds them up — in one expression, for all 5 customers simultaneously. The loop equivalent would be 5 iterations, each doing 3 multiplications and 2 additions. `@` does it all at once in optimised C code.
+
+**Why does changing weights change rankings?** A weight is how much you "care about" each feature. `w_purchases = 5.0` means past purchases count 50× more than page views. Customers who bought before will leap to the top of the ranking. This is the foundation of feature engineering in machine learning — the weights are literally what the model learns during training.
 
 ```
 X = np.array([
